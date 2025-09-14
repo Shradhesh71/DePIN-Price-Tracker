@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <vector>
-#include "IoTxChain-lib.h"
+#include <IoTxChain-lib.h>  // Will use local library from lib/ directory
 
 // External variables that need to be referenced
 extern IoTxChain solana;

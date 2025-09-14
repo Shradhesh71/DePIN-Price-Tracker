@@ -1,13 +1,12 @@
-#include "pins_arduino.h"
 #include <Arduino.h>
 #include <DHT.h>
-#include <WiFi.h>
+#include <ESP8266WiFi.h>
 #include "IoTxChain-lib.h"
 #include "SolanaUtils.h"
 #include "PriceOracle.h"
 
-const char* ssid    = "SSID";
-const char* password = "PASSWORD";
+const char* ssid    = "C203_5G";
+const char* password = "C203wifi";
 
 // Solana RPC URL (Devnet)
 const String solanaRpcUrl = "https://api.devnet.solana.com"; // or mainnet/testnet
@@ -27,11 +26,12 @@ IoTxChain solana(solanaRpcUrl);
 // Initialize Price Oracle (using mainnet prices)
 PriceOracle priceOracle(true);
 
-// Define the built-in LED pin for Arduino Nano ESP32
-// The Arduino Nano ESP32 has the built-in LED on pin 13
-#define LED_PIN LED_BUILTIN
+// Define pins for ESP8266 NodeMCU
+#define LED_PIN LED_BUILTIN  // Built-in LED (GPIO2 on NodeMCU)
+#define LED_RED 5            // External red LED connected to GPIO5 (D1)
+#define LED_BLUE 4           // External blue LED connected to GPIO4 (D2)
 
-#define DHT11PIN 6
+#define DHT11PIN 0           // DHT11 sensor connected to GPIO0 (D3)
 #define DHTTYPE DHT11
 
 DHT dht(DHT11PIN, DHTTYPE);
@@ -49,18 +49,19 @@ void setup() {
   delay(1000);
   
   // Print startup message
-  Serial.println("Arduino Nano ESP32 Example");
+  Serial.println("ESP8266 NodeMCU Price Tracker Example");
   Serial.println("Built-in LED will start blinking...");
 
   connectToWiFi();
 
-  // Configure the LED pin as an output
+  // Configure the LED pins as outputs
   pinMode(LED_PIN, OUTPUT);
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   
-  // Start with LED off
-  digitalWrite(LED_PIN, LOW);
+  // Start with LEDs off
+  digitalWrite(LED_PIN, HIGH);     // Built-in LED is active LOW on ESP8266
+  digitalWrite(LED_RED, LOW);      // External LEDs are active HIGH
   digitalWrite(LED_BLUE, LOW);
   
   // Initialize DHT sensor
@@ -78,18 +79,18 @@ void setup() {
 }
 
 void loop() {
-  // Turn the LED on
-  digitalWrite(LED_PIN, HIGH);
-  digitalWrite(LED_BLUE, HIGH);
-  Serial.println("LED ON");
+  // Turn the LEDs on
+  digitalWrite(LED_PIN, LOW);      // Built-in LED ON (active LOW)
+  digitalWrite(LED_BLUE, HIGH);    // Blue LED ON
+  Serial.println("LEDs ON");
   
   // Wait for 1 second
   delay(1000);
   
-  // Turn the LED off
-  digitalWrite(LED_PIN, LOW);
-  digitalWrite(LED_BLUE, LOW);
-  Serial.println("LED OFF");
+  // Turn the LEDs off
+  digitalWrite(LED_PIN, HIGH);     // Built-in LED OFF (active LOW)
+  digitalWrite(LED_BLUE, LOW);     // Blue LED OFF
+  Serial.println("LEDs OFF");
   
   // Wait for 1 second
   delay(1000);
@@ -128,12 +129,12 @@ void loop() {
 
   if (hic > 30) {
     Serial.println(F("Heat index is above 30°C! :("));
-    digitalWrite(LED_RED, LOW); // Turn on red LED
+    digitalWrite(LED_RED, HIGH); // Turn on red LED
     transferToVault();
     setTemp(t);
   } else {
     Serial.println(F("Heat index is below 30°C :)"));
-    digitalWrite(LED_RED, HIGH); // Turn off red LED
+    digitalWrite(LED_RED, LOW); // Turn off red LED
   }
 
   // Fetch and display prices every 5 loops (10 seconds)

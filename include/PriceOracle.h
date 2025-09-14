@@ -2,8 +2,9 @@
 #define PRICE_ORACLE_H
 
 #include <Arduino.h>
-#include <HTTPClient.h>
+#include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+#include <WiFiClient.h>  // Add WiFiClient for ESP8266
 
 // Pyth Network Price Feed IDs (Mainnet)
 // You can find more at: https://pyth.network/developers/price-feed-ids
@@ -28,7 +29,7 @@ struct PriceData {
 class PriceOracle {
 private:
     String hermesUrl;
-    HTTPClient http;
+    HTTPClient http;  // HTTPClient from ESP8266HTTPClient library
     
     // Parse the JSON response from Pyth
     PriceData parsePythResponse(String jsonResponse, String feedId);

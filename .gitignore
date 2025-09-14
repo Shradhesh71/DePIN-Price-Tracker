@@ -1,1 +1,9 @@
 .DS_Store
+
+ESP8266_Setup_Testing_Guide.md
+
+ESP8266_Hardware_Setup.md
+
+.vscode/
+
+.pio/

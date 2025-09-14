@@ -1,0 +1,6 @@
+adafruit/DHT sensor library@^1.4.4
+adafruit/Adafruit Unified Sensor@^1.1.9
+https://github.com/rweather/arduinolibs.git
+ArduinoJson@^6.21.5
+ESP8266WiFi
+https://github.com/kmackay/micro-ecc.git

@@ -1,5 +1,6 @@
 #include "PriceOracle.h"
 #include <base64.h>
+#include <ESP8266WiFi.h>  // Add WiFi client for ESP8266
 
 PriceOracle::PriceOracle(bool useMainnet) {
     hermesUrl = useMainnet ? HERMES_MAINNET_URL : HERMES_TESTNET_URL;
@@ -107,8 +108,9 @@ PriceData PriceOracle::getLatestPrice(String feedId) {
     
     Serial.println("Fetching price from: " + endpoint);
     
-    // Make HTTP GET request
-    http.begin(endpoint);
+    // Make HTTP GET request with WiFiClient for ESP8266
+    WiFiClient client;
+    http.begin(client, endpoint);
     http.addHeader("Accept", "application/json");
     
     int httpCode = http.GET();

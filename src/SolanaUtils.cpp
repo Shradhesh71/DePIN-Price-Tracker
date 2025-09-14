@@ -1,6 +1,9 @@
 #include "SolanaUtils.h"
 #include "IoTxChain-lib.h"
 
+// Declare external base58Encode function
+extern String base58Encode(const uint8_t* data, size_t len);
+
 // Function implementations
 
 void getSolBalance() {
@@ -123,8 +126,6 @@ String createPDAFromSeeds(const std::vector<std::vector<uint8_t>>& customSeeds) 
   if (solana.findProgramAddress(customSeeds, programId, pdaBytes, bump)) {
     Serial.println("✅ PDA created successfully!");
     
-    // Convert PDA bytes back to base58 string for display
-    // Note: You'd need a proper bytes-to-base58 encoder here
     Serial.print("PDA Bump: ");
     Serial.println(bump);
     Serial.print("PDA Bytes (hex): ");
@@ -135,9 +136,10 @@ String createPDAFromSeeds(const std::vector<std::vector<uint8_t>>& customSeeds) 
     Serial.println();
     
     // Convert PDA bytes to base58 string for return
+    String pdaBase58 = base58Encode(pdaBytes.data(), pdaBytes.size());
     Serial.print("PDA base 58: ");
-    Serial.println(base58Encode(pdaBytes.data(), pdaBytes.size()));
-    return base58Encode(pdaBytes.data(), pdaBytes.size());
+    Serial.println(pdaBase58);
+    return pdaBase58;
   } 
   else {
     Serial.println("❌ Failed to create PDA");

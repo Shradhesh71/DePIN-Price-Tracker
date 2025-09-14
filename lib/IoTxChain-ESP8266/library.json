@@ -1,0 +1,17 @@
+{
+  "name": "IoTxChain-ESP8266",
+  "version": "1.0.0",
+  "description": "ESP8266-compatible version of IoTxChain library for Solana blockchain interactions",
+  "keywords": "solana, blockchain, esp8266, iot",
+  "authors": [
+    {
+      "name": "Custom ESP8266 Port"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "local"
+  },
+  "frameworks": "arduino",
+  "platforms": "espressif8266"
+}
